@@ -1,6 +1,6 @@
 ## Description
 
-\<What the feature do>
+\<What the feature does>
 
 ## Testing
 
