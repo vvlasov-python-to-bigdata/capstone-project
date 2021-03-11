@@ -9,4 +9,8 @@ __pycache__/
 .venv/
 venv/
 
-## Spark stuff
+## IDE stuff
+.vscode/
+
+## Build
+_dist/
