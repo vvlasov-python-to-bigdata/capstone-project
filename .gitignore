@@ -9,7 +9,9 @@ __pycache__/
 .venv/
 venv/
 
-## IDE stuff
+## IDE and OS stuff
+.DS_Store
+
 .vscode/
 
 ## Build
