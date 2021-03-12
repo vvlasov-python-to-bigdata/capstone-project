@@ -50,7 +50,7 @@ help:
 	@echo "   * clean    - remove all build and tests artifacts"
 	@echo "   * build    - archive all jobs and dependent packages to one archive. \
 	Put result to ${BUILD_DIR}/${ARTIFACT_NAME}"
-	@echo "   * deps-dev - create Python virtual environment and install all DEV dependencies \
-	([dev-packages] in Pipfile])."
+	@echo "   * deps-dev - create Python virtual environment and install all dependencies \
+	(including [dev-packages] in Pipfile])."
 	@echo "                The environment is created in .venv folder inside the project."
 	@echo "   * test     - run tests"
