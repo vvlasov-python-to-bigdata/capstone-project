@@ -22,6 +22,7 @@ jobs:
       run: |
         pip install pipenv
         make venv
+        pipenv install coverall
     - name: Run tests
       run: make test
     - name: Upload coverage to Coverall
