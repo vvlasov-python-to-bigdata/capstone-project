@@ -20,7 +20,7 @@ jobs:
         python-version: 3.9
     - name: Setup env
       run: |
-        pip install pyenv
+        pip install pipenv
         make venv
     - name: Run tests
       run: make test
