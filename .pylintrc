@@ -3,6 +3,9 @@
 # Pickle collected data for later comparisons.
 persistent=yes
 
+# Python code to execute for sys.path manipulation such as
+init-hook="import sys; sys.path.append('.');"
+
 [MESSAGES CONTROL]
 
 # Disable the message, report, category or checker with the given id(s).
@@ -30,3 +33,6 @@ argument-rgx=[a-z_][a-z0-9_]{1,30}$
 
 # Naming hint for argument names
 argument-name-hint=[a-z_][a-z0-9_]{1,30}$
+
+# Skip checking docstring in __*__.py files
+no-docstring-rgx=__.*__.py

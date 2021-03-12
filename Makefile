@@ -21,6 +21,7 @@ venv: is-pipenv-installed is-piplock-exists
 
 # Runs tests
 test:
+	@. .venv/bin/activate && nosetests ./tests/* --config=.noserc -v
 
 # Linting source code and tests
 lint: is-venv-exists
