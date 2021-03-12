@@ -1,5 +1,5 @@
 """
-This Python module contains a job which builds purchases attribution 
+This Python module contains a job which builds purchases attribution
 projection.
 
 The job flow:
@@ -26,7 +26,6 @@ def main() -> None:
 
     :return: None
     """
-    pass
 
 
 def extract_data(ss: SparkSession) -> DataFrame:
@@ -36,7 +35,6 @@ def extract_data(ss: SparkSession) -> DataFrame:
     :param ss: an instance of SparkSession.
     :return: Spark DataFrame with input data.
     """
-    pass
 
 
 def transform_data(df: DataFrame) -> DataFrame:
@@ -46,7 +44,6 @@ def transform_data(df: DataFrame) -> DataFrame:
     :param df: dataset to transform as DataFrame.
     :return: transformed DataFrame.
     """
-    pass
 
 
 def load_data(df: DataFrame) -> None:
@@ -56,7 +53,6 @@ def load_data(df: DataFrame) -> None:
     :param df: DataFrame to process.
     :return: None
     """
-    pass
 
 
 if __name__ == "__main__":
