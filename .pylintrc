@@ -1,0 +1,32 @@
+[MASTER]
+
+# Pickle collected data for later comparisons.
+persistent=yes
+
+[MESSAGES CONTROL]
+
+# Disable the message, report, category or checker with the given id(s).
+# Disabled:
+#   * R0801: Similar lines, duplicate-code (we have similar code structure in all jobs)
+#   * W0613: [TEMPORARY] Unused argument
+disable=R0801, W0613
+
+[BASIC]
+
+# Regular expression matching correct variable names
+variable-rgx=[a-z_][a-z0-9_]{1,30}$
+
+# Naming hint for variable names
+variable-name-hint=[a-z_][a-z0-9_]{1,30}$
+
+# Regular expression matching correct attribute names
+attr-rgx=[a-z_][a-z0-9_]{1,30}$
+
+# Naming hint for attribute names
+attr-name-hint=[a-z_][a-z0-9_]{1,30}$
+
+# Regular expression matching correct argument names
+argument-rgx=[a-z_][a-z0-9_]{1,30}$
+
+# Naming hint for argument names
+argument-name-hint=[a-z_][a-z0-9_]{1,30}$
