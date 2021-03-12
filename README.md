@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/vvlasov-python-to-bigdata/capstone-project/badge.svg?branch=main)](https://coveralls.io/github/vvlasov-python-to-bigdata/capstone-project?branch=main)
+
 # Python to BigData: Capstone Project
 
 This is a final project of _Python Engineer to BigData Engineer_ LP 
