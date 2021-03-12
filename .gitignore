@@ -5,6 +5,7 @@ __pycache__/
 
 # Tests / reports
 .coverage
+coverage.xml
 
 # Virtual environment
 .venv/

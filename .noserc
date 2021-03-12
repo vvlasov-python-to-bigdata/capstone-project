@@ -3,5 +3,6 @@ logging-format="[%(levelname)s][%(name)s] %(message)s"
 
 with-coverage=1
 cover-package=src
+cover-xml=1
 
 rednose=1
