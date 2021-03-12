@@ -1,0 +1,7 @@
+[nosetests]
+logging-format="[%(levelname)s][%(name)s] %(message)s"
+
+with-coverage=1
+cover-package=src
+
+rednose=1
