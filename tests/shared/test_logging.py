@@ -3,10 +3,7 @@ This module contains tests for `shared.logging` module.
 """
 import unittest
 
-from pyspark.sql import SparkSession
-
 from src.shared.spark import start_spark_session
-from src.shared.logging import Log4jWrapper
 
 
 class Log4jWrapperTests(unittest.TestCase):
@@ -14,8 +11,12 @@ class Log4jWrapperTests(unittest.TestCase):
     Test suite for shared.logging.Log4jWrapper class tests.
     """
     def setUp(self):
-        _, logger = start_spark_session("test-app")
+        spark_session, logger, _ = start_spark_session("test-app")
         self.logger = logger
+        self.spark_session = spark_session
+
+    def tearDown(self):
+        self.spark_session.stop()
 
     def test_log_info(self):
         """
