@@ -3,7 +3,7 @@ This Python module contains a job which calculates the most popular
 advertisement channel for each marketing campaign. A channel popularity
 is based on the amount of unique user sessions with the App.
 
-The job is implemented using plain SQL over Spark DataFrame.
+The job is implemented using Spark DataFrame API.
 
 The job flow:
   * Read data from Parquet files (purchases projection from task #1)
@@ -24,10 +24,10 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 """
-import os
 import sys
 
-from pyspark.sql import SparkSession, DataFrame
+import pyspark.sql.functions as F
+from pyspark.sql import SparkSession, DataFrame, Window
 
 from shared.logging import Log4jWrapper
 from shared.spark import start_spark_session
@@ -42,7 +42,7 @@ def main() -> None:
     cfg_file = sys.argv[1] if len(sys.argv) > 1 else "config/test/most_popular_channels_config.yaml"
 
     spark_session, spark_logger, config = start_spark_session(
-        app_name = "most_popular_channels_sql",
+        app_name = "most_popular_channels_df_api",
         files=[cfg_file]
     )
 
@@ -70,24 +70,23 @@ def extract_data(ss: SparkSession, config: dict) -> DataFrame:
     return purchases_attribution_df
 
 
-def transform_data(purchases_attribution_df: DataFrame, logger: Log4jWrapper) -> DataFrame:
+def transform_data(projection_df: DataFrame, logger: Log4jWrapper) -> DataFrame:
     """
-    Tranforms purchases attribution dataframe to calculate the most
-    popular advertisement channel per each marketing campaign.
+    Tranforms original dataset.
 
-    :param purchases_attribution_df: dataset to transform as DataFrame.
+    :param projection_df: dataset to transform as DataFrame.
     :param logger: Spark Log4j wrapper to write logs.
     :return: transformed DataFrame.
     """
-    logger.warning("storing purchases attribution to temporary table 'purchases' ...")
-    purchases_attribution_df.registerTempTable("purchases")
+    campaign_window: Window = Window.partitionBy("campaignId").orderBy(F.desc("sessionsCount"))
 
     logger.warning("calculating the most popular ads channel per each marketing campaign ...")
-    sql_file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                 "sql/most_popular_channels.sql")
-    with open(sql_file_path, "r", encoding="utf-8") as sql_file:
-        sql_query = sql_file.read()
-        most_popular_channels_df = purchases_attribution_df.sql_ctx.sql(sql_query)
+    most_popular_channels_df = (
+        projection_df
+        .groupBy(F.col("campaignId"), F.col("channelId"))
+        .agg(F.countDistinct(F.col("sessionId")).alias("sessionsCount"))
+        .withColumn("channelRank", F.rank().over(campaign_window))
+    )
 
     most_popular_channels_df.show()
 
@@ -96,7 +95,7 @@ def transform_data(purchases_attribution_df: DataFrame, logger: Log4jWrapper) ->
 
 def load_data(df: DataFrame, config: dict) -> None:
     """
-    Saves df as Parquet files.
+    Collects data and writes results to Parquet files.
 
     :param df: DataFrame to process.
     :param config: dictionary with the job params.
