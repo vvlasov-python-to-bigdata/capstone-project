@@ -38,10 +38,10 @@ class StartSparkSessionTests(unittest.TestCase):
         Test: Function start_spark_session() loads config from file
         """
         spark_session, _, config = start_spark_session(
-            "test-app", files=["config/tests_config.yaml"])
+            "test-app", files=["config/test/dummy_config.yaml"])
 
         self.assertIsNotNone(config)
-        self.assertTrue("input_data" in config)
+        self.assertTrue("input" in config)
 
         spark_session.stop()
 

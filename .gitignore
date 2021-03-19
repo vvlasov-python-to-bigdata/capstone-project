@@ -16,5 +16,7 @@ venv/
 
 .vscode/
 
-## Build
+## Build and run
 _dist/
+data/
+_output/
