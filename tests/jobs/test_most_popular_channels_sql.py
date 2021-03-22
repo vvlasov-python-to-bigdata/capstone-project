@@ -73,7 +73,7 @@ class MostPopularChannelsSQLTests(unittest.TestCase):
         [self.assertIn(col, expected_columns) for col in most_popular_channels_df.columns]
         self.assertEqual(3, total_rows)
 
-        # Checl grouping by channels and campaigns
+        # Check grouping by channels and campaigns
         num_groups_for_first_campaign = (
             most_popular_channels_df
             .filter(F.col("campaignId") == "1")
