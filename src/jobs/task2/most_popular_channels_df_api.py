@@ -1,15 +1,15 @@
 """
-This Python module contains a job which calculates the top 10
-marketing campaigns based on revenue (sum of costs of confirmed
-purchases).
+This Python module contains a job which calculates the most popular
+advertisement channel for each marketing campaign. A channel popularity
+is based on the amount of unique user sessions with the App.
 
-The job is implemented using plain Spark DataFrame API.
+The job is implemented using Spark DataFrame API.
 
 The job flow:
   * Read data from Parquet files (purchases projection from task #1)
-  * Filter only confirmed purchases (by `isConfirmed==True`)
-  * Calculate revenue for each campaign
-  * Output only top 10 marketing campaigns
+  * Calculate amount of unique sessions per channel in each campaign
+  * Use window function to rank channels in each campaign by the amount of
+    unique sessions
   * Save results as Parquet files
 
 This program is free software: you can redistribute it and/or modify it under
@@ -27,7 +27,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import sys
 
 import pyspark.sql.functions as F
-from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql import SparkSession, DataFrame, Window
 
 from shared.logging import Log4jWrapper
 from shared.spark import start_spark_session
@@ -39,21 +39,20 @@ def main() -> None:
 
     :return: None
     """
-    cfg_file = sys.argv[1] if len(sys.argv) > 1 \
-                           else "config/test/top_marketing_campaigns_config.yaml"
+    cfg_file = sys.argv[1] if len(sys.argv) > 1 else "config/test/most_popular_channels_config.yaml"
 
     spark_session, spark_logger, config = start_spark_session(
-        app_name = "top_marketing_campaigns_df_api",
+        app_name = "most_popular_channels_df_api",
         files=[cfg_file]
     )
 
     spark_logger.warning("job is up and running")
 
     purchases_attribution_df = extract_data(spark_session, config)
-    top_marketing_campaigns_df = transform_data(purchases_attribution_df, spark_logger)
+    most_popular_channels_df = transform_data(purchases_attribution_df, spark_logger)
 
     spark_logger.warning(f"storing results as Parquet files to {config['output']}")
-    load_data(top_marketing_campaigns_df, config)
+    load_data(most_popular_channels_df, config)
 
     spark_logger.warning("job is finished")
     spark_session.stop()
@@ -79,19 +78,19 @@ def transform_data(projection_df: DataFrame, logger: Log4jWrapper) -> DataFrame:
     :param logger: Spark Log4j wrapper to write logs.
     :return: transformed DataFrame.
     """
-    # pylint: disable=singleton-comparison
-    top_marketing_campaigns_df = (
+    campaign_window: Window = Window.partitionBy("campaignId").orderBy(F.desc("sessionsCount"))
+
+    logger.warning("calculating the most popular ads channel per each marketing campaign ...")
+    most_popular_channels_df = (
         projection_df
-        .filter(F.col("isConfirmed") == True)
-        .groupBy(F.col("campaignId"))
-        .agg(F.sum(F.col("billingCost")).alias("revenue"))
-        .orderBy(F.col("revenue").desc())
-        .limit(10)
+        .groupBy(F.col("campaignId"), F.col("channelId"))
+        .agg(F.countDistinct(F.col("sessionId")).alias("sessionsCount"))
+        .withColumn("channelRank", F.rank().over(campaign_window))
     )
 
-    top_marketing_campaigns_df.show()
+    most_popular_channels_df.show()
 
-    return top_marketing_campaigns_df
+    return most_popular_channels_df
 
 
 def load_data(df: DataFrame, config: dict) -> None:

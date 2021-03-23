@@ -5,7 +5,7 @@ ARTIFACT_NAME=jobs.zip
 build: clean make-build-dir deps
 	find ./src/jobs ! -name __init__.py -type f -exec cp {} ./$(BUILD_DIR) \;
 	cp -r ./src/shared ./$(BUILD_DIR)/shared
-	zip -r ./$(BUILD_DIR)/$(ARTIFACT_NAME) ./$(BUILD_DIR)/**
+	cd ./$(BUILD_DIR) && zip -r ./$(ARTIFACT_NAME) .
 	find ./$(BUILD_DIR)/* ! -name '$(ARTIFACT_NAME)' -exec rm -rf {} +
 
 # Downloads dependencies to $(BUILD_DIR) folder
@@ -21,7 +21,7 @@ venv: is-pipenv-installed is-piplock-exists
 
 # Runs tests
 test:
-	@. .venv/bin/activate && nosetests ./tests/* --config=.noserc -v
+	@. .venv/bin/activate && nosetests --config=.noserc -v tests
 
 # Linting source code and tests
 lint: is-venv-exists

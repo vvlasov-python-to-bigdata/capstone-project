@@ -1,0 +1,2 @@
+input: "tests/_data/purchases_attribution"
+output: "_output/most_popular_channels"

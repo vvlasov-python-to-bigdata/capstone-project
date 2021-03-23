@@ -1,0 +1,6 @@
+purchaseId,purchaseTime,billingCost,isConfirmed,sessionId,campaignId,channelId
+1,2020-10-05 14:54:35,10,True,1,1,Yandex Ads
+2,2020-10-05 14:54:35,10,False,2,1,Yandex Ads
+3,2020-10-05 14:54:35,10,True,3,1,Yandex Ads
+4,2020-10-05 14:54:35,10,True,4,1,Google Ads
+5,2020-10-05 14:54:35,10,True,4,2,Google Ads

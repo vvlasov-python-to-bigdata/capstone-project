@@ -10,7 +10,7 @@ from pyspark import SparkFiles
 from pyspark.sql import SparkSession
 
 import __main__
-from src.shared.logging import Log4jWrapper
+from .logging import Log4jWrapper
 
 
 CONFIG_FILE_SUFFIX = "_config.yaml"
@@ -54,6 +54,9 @@ def start_spark_session(app_name: str, files: List[str] = None) -> tuple:
         # Add additional files
         spark_builder.config('spark.files', ','.join(files))
 
+        # Save events log for history
+        spark_builder.config('spark.eventLog.enabled', True)
+
     # Create session and logger objects
     spark_session: SparkSession = spark_builder.getOrCreate()
     logger: Log4jWrapper = Log4jWrapper(spark_session.sparkContext)
@@ -70,7 +73,7 @@ def start_spark_session(app_name: str, files: List[str] = None) -> tuple:
             path_to_config_file = os.path.join(spark_files_dir, cfg_file)
             with open(path_to_config_file, 'r') as config_file:
                 config_dict = {**config_dict, **yaml.safe_load(config_file)}
-            logger.info(f"parsed config file: {cfg_file}")
+            logger.warning(f"parsed config file: {cfg_file}")
     else:
         logger.info('no config files found')
         config_dict = None
