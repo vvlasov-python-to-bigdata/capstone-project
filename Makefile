@@ -20,7 +20,7 @@ venv: is-pipenv-installed is-piplock-exists
 	PIPENV_VENV_IN_PROJECT=enabled pipenv install --dev
 
 # Runs tests
-test:
+test: is-venv-exists
 	@. .venv/bin/activate && nosetests --config=.noserc -v tests
 
 # Linting source code and tests
