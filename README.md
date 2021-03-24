@@ -19,18 +19,26 @@ This is a final project of _Python Engineer to BigData Engineer_ LP
 including marketing analytics BigData tasks on sample dataset. The solution is made using `PySpark v3.1.1`.
 
 #### List of tasks:
-* **Task #1.1.** [Build purchases attribution projection (using default SparkSQL)]() [**[Source code]**](/src/jobs/task1/purchases_attribution_sql.py)
-* **Task #1.2.** [Build purchases attribution projection (using custom UDF)]()
-* **Task #2.1.** [Calculate top marketing campaigns by revenue]() [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_sql.py)
-* **Task #2.2.** [Calculate the most popular marketing channel]() [**[Source code]**](/src/jobs/task2/most_popular_channels_sql.py)
+* **Task #1.1.** [Build purchases attribution projection (using default SparkSQL)](#build-purchases-attribution-projection-using-default-sparksql) [**[Source code]**](/src/jobs/task1/purchases_attribution_sql.py)
+* **Task #1.2.** [Build purchases attribution projection (using custom UDF)](#build-purchases-attribution-projection-using-custom-udf)
+* **Task #2.1.** [Calculate top marketing campaigns by revenue](#calculate-top-marketing-campaigns-by-revenue) [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_sql.py)
+* **Task #2.2.** [Calculate the most popular marketing channel](#calculate-the-most-popular-marketing-channel) [**[Source code]**](/src/jobs/task2/most_popular_channels_sql.py)
 
 #### Additional tasks:
-* **Task #2.1(2).** [Calculate top marketing campaigns by revenue (using Spark DataFrame API only)]() [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_df_api.py)
-* **Task #2.2(2)**. [Calculate the most popular marketing channel (using Spark DataFrame API only)]() [**[Source code]**](/src/jobs/task2/most_popular_channels_df_api.py)
+* **Task #2.1(2).** Calculate top marketing campaigns by revenue (using Spark DataFrame API only) [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_df_api.py)
+* **Task #2.2(2).** Calculate the most popular marketing channel (using Spark DataFrame API only) [**[Source code]**](/src/jobs/task2/most_popular_channels_df_api.py)
 
 ## Solution Description
 
 This section describes solution details for each task.
+
+### Build purchases attribution projection (using default SparkSQL)
+
+### Build purchases attribution projection (using custom UDF)
+
+### Calculate top marketing campaigns by revenue
+
+### Calculate the most popular marketing channel
 
 ## Usage
 
@@ -38,7 +46,23 @@ This section describes how to build, run and work with the project.
 
 ### Prerequisites
 
-### Set up for development
+> **NOTE**
+>
+> Is is recommended to use `MacOS` or `Linux` to build or run this porject.
+>
+> But if you are using `Windows` make sure you have `make` command
+> installed from `GNUWin32` package: http://gnuwin32.sourceforge.net/packages/make.htm.
+
+* `Python 3.7+`
+* `PySpark v3.1.1+`
+* [`pipenv`](https://pypi.org/project/pipenv/)
+  <details>
+    <summary>How to install</summary>
+  
+    <code>python -m pip install pipenv</code>
+  </details>
+
+### Setup
 
 ### Running the tests
 
