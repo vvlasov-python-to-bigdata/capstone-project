@@ -32,7 +32,25 @@ including marketing analytics BigData tasks on sample dataset. The solution is m
 
 This section describes project structure, general approach for the solution and tasks implementation details.
 
-See more details about the project structure in [Project structure section](#project-structure)
+See more details about the project structure in [Project structure section](#project-structure).
+
+Each task is in a separated Python file imitating a Spark job. All tasks source code is placed in `src/jobs` folder. 
+Another module in `src` folder - `src/shared`, contains utilitary code to use in all jobs:
+* `src/shared/spark.py` - has function `start_spark_session()` which determines running environment - on local Spark 
+or on remote Spark cluster and creates related Spark session object, logger wrapper object and parses configuration
+into dictionary if presented. In case of local run, job uses default test configuration or you can specify your own (see [Run on local Spark](#run-on-local-spark)). For remote run, each files ends with `_config.yaml` will be recognized as config file and parsed.
+* `src/shared/logging.py` - has class `Log4jWrapper` which is a wrapper over Spark Log4j logger. This class allows simply write logs to Spark job logs with prefix `<SPARK_APP_ID SPARK_APP_NAME>`.
+
+All Python files for each task have the similar structure. Main idea of the structure is that, in terms of ETL job, 
+the 'Transormation' step should be isolated from the 'Extract' and 'Load' steps. Each job step is incapsulated in 
+its own function and communicates using `DataFrame` objects, e.g. the 'Transformation' step takes input data as 
+one or more DataFrame objects and returns the transformed data as a single DataFrame object. All steps are used in 
+`main()` method which initializes SparkSession object and uses it to work with data. This approach allows easily 
+test each step of the job and makes 'Tranformation' step _idempotent_.
+
+Each job may have a set of job-specific parameters, like input data folder, output folder, some hyperparameters. 
+Jobs parametrization is supported via YAML files. In my opinion, it is a more flexible way rather than using Python script 
+arguments because allows adding new parameter without source code changing and have a well-structured view of all parameters of a job. There is a strict contract for config files naming - they should have `_config.yaml` suffix. It is needed for running job on a remote Spark cluster - function `src/shared/spark.py#start_spark_session()` automatically finds all files with this suffix in Spark root directory and parses its as configuration. So, for local runs you can use test configuration which each job uses by default and send specific prodaction config files to Spark cluster when run a job on remote cluster.
 
 ### Project structure
 
