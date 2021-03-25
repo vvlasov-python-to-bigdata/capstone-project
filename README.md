@@ -30,7 +30,56 @@ including marketing analytics BigData tasks on sample dataset. The solution is m
 
 ## Solution Description
 
-This section describes solution details for each task.
+This section describes project structure, general approach for the solution and tasks implementation details.
+
+See more details about the project structure in [Project structure section](#project-structure)
+
+### Project structure
+
+The repository has the following structure:
+```
+./
+ |-- _dist/                             # folder for build artifacts
+ |-- config/                            # jobs config as YAML files
+      |-- test/
+      |-- prod/
+ |-- src/
+      |-- jobs/                         # jobs definition
+      |-- shared/                       # Python code available for each job
+ |-- tests/
+      |-- _data/                        # test data
+           |-- dummy                    # fake small data to check jobs tranformations
+           |-- mobile_app_clickstream   
+           |-- purchases_attribution    # data calculated in task #1
+           |-- user_purchases
+      |-- jobs/                         # tests for jobs
+      |-- shared/                       # tests for shared modules
+ |   .env                               # file witn environment variables for pipenv
+ |   .gitignore
+ |   .noserc                            # nosetests settings
+ |   .pylintrc                          # pylint settings
+ |   LICENSE
+ |   Makefile
+ |   Pipfile
+ |   Pipfile.lock
+ |   README.md
+```
+
+The main module containing Spark jobs definition is `src/jobs`. Module `src/shared` contains Python code which 
+is packing together with jobs definition and can be used in all jobs. This module contains a wrapper for 
+Spark Log4j logger to use it in Python code and a function which initialize Spark session object depends on 
+environment.
+
+Any configuration parameters, like paths to input data and ouput folder, can be specified in YAML files in `config/` folder. Note, that these files should have `_config.yaml` suffix.
+
+File `Makefile` contains the project setting up and building commands definition.
+
+Folder `_dist` is using by the `Makefile` to store temporary build artifacts and final archive - `jobs.zip`.
+
+Files `Pipfile` and `Pipfile.lock` configure Python environment and its dependencies. For this environment the are a 
+set of environment variables saved in `.env`.
+
+Files `.noserc` and `.pylintrc` stores configuration for _nosetests_ and _pylint_ to simplify its usage.
 
 ### Build purchases attribution projection (using default SparkSQL)
 
