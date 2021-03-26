@@ -4,6 +4,7 @@
 
 * [Overview](#overview)
 * [Solution Description](#solution-description)
+  * [Project structure](#project-structure)
 * [Usage](#usage)
   * [Prerequisites](#prerequisites)
   * [Set up for development](#set-up-for-development)
@@ -19,10 +20,10 @@ This is a final project of _Python Engineer to BigData Engineer_ LP
 including marketing analytics BigData tasks on sample dataset. The solution is made using `PySpark v3.1.1`.
 
 #### List of tasks:
-* **Task #1.1.** [Build purchases attribution projection (using default SparkSQL)](#build-purchases-attribution-projection-using-default-sparksql) [**[Source code]**](/src/jobs/task1/purchases_attribution_sql.py)
-* **Task #1.2.** [Build purchases attribution projection (using custom UDF)](#build-purchases-attribution-projection-using-custom-udf)
-* **Task #2.1.** [Calculate top marketing campaigns by revenue](#calculate-top-marketing-campaigns-by-revenue) [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_sql.py)
-* **Task #2.2.** [Calculate the most popular marketing channel](#calculate-the-most-popular-marketing-channel) [**[Source code]**](/src/jobs/task2/most_popular_channels_sql.py)
+* **Task #1.1.** Build purchases attribution projection (using default SparkSQL) [**[Source code]**](/src/jobs/task1/purchases_attribution_sql.py)
+* **Task #1.2.** Build purchases attribution projection (using custom UDF)
+* **Task #2.1.** Calculate top marketing campaigns by revenue [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_sql.py)
+* **Task #2.2.** Calculate the most popular marketing channel [**[Source code]**](/src/jobs/task2/most_popular_channels_sql.py)
 
 #### Additional tasks:
 * **Task #2.1(2).** Calculate top marketing campaigns by revenue (using Spark DataFrame API only) [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_df_api.py)
@@ -58,6 +59,7 @@ The repository has the following structure:
 ```
 ./
  |-- _dist/                             # folder for build artifacts
+ |-- docs/                              # additional docs and pictures
  |-- config/                            # jobs config as YAML files
       |-- test/
       |-- prod/
@@ -99,13 +101,23 @@ set of environment variables saved in `.env`.
 
 Files `.noserc` and `.pylintrc` stores configuration for _nosetests_ and _pylint_ to simplify its usage.
 
-### Build purchases attribution projection (using default SparkSQL)
+### How user session for the task#1 is calculating
 
-### Build purchases attribution projection (using custom UDF)
+In `task #1` it is necessary to add field `sessionId` to the resulting projection:
+```
+// a session starts with app_open event and finishes with app_close 
+sessionId: String
+```
 
-### Calculate top marketing campaigns by revenue
+Theoretically, we can have the following cases of user session (omitting useless event types):
 
-### Calculate the most popular marketing channel
+![Possible (in theory) user session cases](docs/pictures/Capstone_UserSessionCases.png)
+
+Cases **#1** and **#2** are simple - we can just mark all `app_open` events, leading with `app_close` event (using windowing by `userId`), with a unique id and then add this id for all events happened between related `app_open` and `app_close` events (**This approach was used for the solution**).
+
+Case **#3** is a little bit more complex because of overlapping sessions. We have two ways how to deal with it. 
+First, if it doesn't matter which marketing campaign and channel cause a purchase, we can just use the first `app_open` event and the last `app_close` event in a group of user events. But in a real use case, I think, we should add additional grouping by `campaign_id` and `channel_id` when calculating leading events for `app_open` event. I believe, it doesn't 
+matter, from which device and in which moment of time a user makes a purchase, it is matter, which marketing campaign and ads channel cause it.
 
 ## Usage
 
