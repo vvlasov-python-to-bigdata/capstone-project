@@ -22,7 +22,7 @@ including marketing analytics BigData tasks on sample dataset. The solution is m
 
 #### List of tasks:
 * **Task #1.1.** Build purchases attribution projection (using default SparkSQL) [**[Source code]**](/src/jobs/task1/purchases_attribution_sql.py)
-* **Task #1.2.** Build purchases attribution projection (using custom UDF)
+* **Task #1.2.** Build purchases attribution projection (using custom UDF) [**[Source code]**](/src/jobs/task1/purchases_attribution_udf.py)
 * **Task #2.1.** Calculate top marketing campaigns by revenue [**[Source code]**](/src/jobs/task2/top_marketing_campaigns_sql.py)
 * **Task #2.2.** Calculate the most popular marketing channel [**[Source code]**](/src/jobs/task2/most_popular_channels_sql.py)
 
