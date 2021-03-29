@@ -1,0 +1,3 @@
+input_clickstream: "data/mobile_app_clickstream"
+input_purchases: "data/user_purchases"
+output: "_output/purchases_attribution"

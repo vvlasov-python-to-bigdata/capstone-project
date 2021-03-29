@@ -1,0 +1,2 @@
+input: "data/purchases_attribution"
+output: "_output/top_marketing_campaigns"
