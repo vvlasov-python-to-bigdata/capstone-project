@@ -17,6 +17,7 @@ deps: is-pipenv-installed is-piplock-exists venv
 
 # Makes Pipenv environment and install all dev dependencies
 venv: is-pipenv-installed is-piplock-exists
+	mkdir /tmp/spark-events
 	PIPENV_VENV_IN_PROJECT=enabled pipenv install --dev
 
 # Runs tests

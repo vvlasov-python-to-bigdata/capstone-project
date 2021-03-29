@@ -5,6 +5,7 @@
 * [Overview](#overview)
 * [Solution Description](#solution-description)
   * [Project structure](#project-structure)
+  * [How user session for the task#1 is calculating](#how-user-session-for-the-task1-is-calculating)
 * [Usage](#usage)
   * [Prerequisites](#prerequisites)
   * [Set up for development](#set-up-for-development)
@@ -113,11 +114,11 @@ Theoretically, we can have the following cases of user session (omitting useless
 
 ![Possible (in theory) user session cases](docs/pictures/Capstone_UserSessionCases.png)
 
-Cases **#1** and **#2** are simple - we can just mark all `app_open` events, leading with `app_close` event (using windowing by `userId`), with a unique id and then add this id for all events happened between related `app_open` and `app_close` events (**This approach was used for the solution**).
+Cases **#1** and **#2** - we can mark all `app_open` events, leading with `app_close` event (using windowing by `userId`), with a unique id and then add this id for all events happened between related `app_open` and `app_close` events (**This approach was used for the solution**).
 
-Case **#3** is a little bit more complex because of overlapping sessions. We have two ways how to deal with it. 
-First, if it doesn't matter which marketing campaign and channel cause a purchase, we can just use the first `app_open` event and the last `app_close` event in a group of user events. But in a real use case, I think, we should add additional grouping by `campaign_id` and `channel_id` when calculating leading events for `app_open` event. I believe, it doesn't 
-matter, from which device and in which moment of time a user makes a purchase, it is matter, which marketing campaign and ads channel cause it.
+Case **#3** - need to take into account overlapping sessions. We can add additional grouping by `campaign_id` and `channel_id` when calculating leading events for `app_open` event and use the first `app_open` event and the last `app_closed` event. We can group sessions came from one channel and campaign into one.
+
+The first approach was chosen for the task because, analysis of the whole input data shows that there is no overlapping sessions at all. Moreover, there is only one session with only one purchase per user.
 
 ## Usage
 
